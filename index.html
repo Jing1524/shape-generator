@@ -44,6 +44,34 @@
         background-color: dodgerBlue;
         transition: background-color 1s;
       }
+
+      #container > div.blue.square {
+        background-color: dodgerBlue;
+        transition: background-color 1s;
+      }
+      
+     #container > div.clear{
+     
+        background-color:transparent;
+        transition: background-color 1s;
+       
+       
+      }
+
+      #container > div.square {
+      
+        border-radius: 0%;
+        
+      }
+
+      #container > div > span.square {
+       
+        border-radius: 0%;
+      }
+
+     
+
+
     </style>
     <title>Shape Generator</title>
   </head>
@@ -70,23 +98,55 @@
     <form>
       <input name='px' value='25'/>
     </form>
+
+
     <div id='container'>
+       
+
     </div>
+
+
+
     <script>
       const form = document.querySelector('form');
       const input = form.querySelector('input');
       const link = document.querySelector('a');
       const container = document.querySelector('#container');
 
-      container.addEventListener('click', (ev)=>{
+     container.addEventListener('click', (ev)=>{
+       console.log("target:", ev.target);
+       console.log("classList:", ev.target.classList);
         if(!ev.target.id){
-          ev.target.parentNode.removeChild(ev.target);
+          
+          ev.target.parentNode.classList.remove("blue");
+          ev.target.parentNode.classList.add("clear");
+          // container.removeChild(ev.target.parentNode);
         }
       });
 
+      const h1 = document.querySelector("h1");
+      const p1 = document.createElement("p");
+      const p2 = document.createElement("span")
+
+
+      const sum = 0;
+      const arr = [...container.children].forEach((child)=>{
+        sum += parseInt(child.firstChild.innerText);
+      });
+      console.log(sum);
+      const result = Math.round(sum/container.childElementCount);
+     
+
+
+
+      h1.appendChild(p2);
+     
+      
+      h1.appendChild(p1);
       const generateCircle = ()=> {
         const size = `${input.value}px`;
-        const circle = document.createElement('div');
+        const circle = document.createElement("div");
+        
         circle.style.width = size;
         circle.style.height = size;
         container.appendChild(circle);
@@ -97,16 +157,61 @@
         window.setTimeout(function(){
           circle.classList.add('blue');
         }, 500);
+        
+        p1.innerText = container.childElementCount;
+        p2.innerText = result;
+        
       };
+
+      const generateSquare = ()=> {
+        const size = `${input.value}px`;
+        const square = document.createElement("div");
+        
+        square.style.width = size;
+        square.style.height = size;
+        container.appendChild(square);
+        const span = document.createElement('span');
+        span.innerText = input.value;
+        square.appendChild(span);
+        input.value = 25 + Math.floor(Math.random()*50);
+        square.classList.add("square");
+        span.classList.add("square");
+        window.setTimeout(function(){
+          square.classList.add('blue');
+        }, 500);
+        
+        p1.innerText = container.childElementCount;
+        
+      };
+      
+      
+      function getRandomInt(num) {
+          return Math.floor(Math.random() * num);
+       }
+
 
       form.addEventListener('submit', (ev)=> {
         ev.preventDefault();
-        generateCircle();
+        console.log("event",ev);
+        if(parseInt(input.value) > 25 && parseInt(input.value) < 250){
+          const seed = getRandomInt(2);
+            if(seed === 0){
+                generateCircle();
+             }else{
+              generateSquare();
+             }
+        }
+      
+      
+
+
+        
       });
 
       generateCircle();
       generateCircle();
       generateCircle();
+      generateSquare();
 
     </script>
   </body>
